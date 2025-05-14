@@ -2,6 +2,9 @@ package com.example.TaskManagementSystem.model;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -16,7 +19,7 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
 
-    private Long id;
+    private Long userId;
     private String username;
     private String email;
     private String password;
@@ -24,7 +27,8 @@ public class User {
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    @OneToMany(mappedBy = "assignedTo")
+    @OneToMany(mappedBy = "assignedTo", cascade = CascadeType.ALL)
+    @JsonManagedReference
     private List<Task> tasks;
 
     public User() {

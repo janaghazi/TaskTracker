@@ -1,5 +1,8 @@
 package com.example.TaskManagementSystem.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -12,14 +15,15 @@ public class Task {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
+    private Long taskId;
+    @Column(nullable = false)
     private String title;
     private String description;
     private String status;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id", referencedColumnName = "userId")
+    @JsonBackReference
     private User assignedTo;
 
     public Task() {
