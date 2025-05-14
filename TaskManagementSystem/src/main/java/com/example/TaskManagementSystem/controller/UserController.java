@@ -1,8 +1,6 @@
 package com.example.TaskManagementSystem.controller;
 
 import java.util.List;
-import java.util.Optional;
-
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -16,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.TaskManagementSystem.dto.UserDTO;
 import com.example.TaskManagementSystem.exception.AccessDeniedException;
 import com.example.TaskManagementSystem.exception.ResourceNotFoundException;
 import com.example.TaskManagementSystem.model.Role;
@@ -43,9 +42,12 @@ public class UserController {
 
     // only an admin has authorization to see all taslks
     @PreAuthorize("hasAnyRole('ADMIN')")
-    @GetMapping("/all")
-    public List<User> getAllUsers() {
-        return userRepository.findAll();
+    @GetMapping("")
+    public List<UserDTO> getAllUsers() {
+        return userRepository.findAll()
+                .stream()
+                .map(UserDTO::new)
+                .toList();
     }
 
     @GetMapping("/{id}")
@@ -56,7 +58,7 @@ public class UserController {
         User currentUser = getCurrentUser();
         if (currentUser.getRole().equals(Role.ADMIN)
                 || currentUser.getUserId().equals(user.getUserId())) {
-            return ResponseEntity.ok(user);
+            return ResponseEntity.ok(new UserDTO(user));
         }
 
         throw new AccessDeniedException("You are not authorized to view this user.");
@@ -70,6 +72,6 @@ public class UserController {
 
         user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
         user.setRole(Role.USER); // default role
-        return new ResponseEntity<>(userRepository.save(user), HttpStatus.CREATED);
+        return new ResponseEntity<>(new UserDTO(userRepository.save(user)), HttpStatus.CREATED);
     }
 }
