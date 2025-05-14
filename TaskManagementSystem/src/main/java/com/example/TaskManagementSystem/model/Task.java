@@ -2,13 +2,13 @@ package com.example.TaskManagementSystem.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.validation.constraints.NotBlank;
 
 @Entity
 public class Task {
@@ -16,10 +16,15 @@ public class Task {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long taskId;
-    @Column(nullable = false)
+
+    @NotBlank(message = "Title is required")
     private String title;
+
+    @NotBlank(message = "Description is required")
     private String description;
-    private String status;
+
+    @NotBlank(message = "Status is required")
+    private String status; // consider using enum for better control
 
     @ManyToOne
     @JoinColumn(name = "user_id", referencedColumnName = "userId")
@@ -66,6 +71,10 @@ public class Task {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public Long getTaskId() {
+        return taskId;
     }
 
 }
