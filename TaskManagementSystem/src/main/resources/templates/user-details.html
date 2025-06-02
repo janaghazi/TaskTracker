@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+   <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+   <head>
+       <meta charset="UTF-8">
+       <meta name="viewport" content="width=device-width, initial-scale=1.0">
+       <title>User Details</title>
+       <script src="https://cdn.tailwindcss.com"></script>
+   </head>
+   <body class="bg-gray-100">
+       <nav class="bg-blue-600 p-4 text-white">
+           <div class="container mx-auto flex justify-between">
+               <h1 class="text-2xl font-bold">Task Management System</h1>
+               <div>
+                   <a th:href="@{/view/tasks}" class="px-4" sec:authorize="hasRole('ADMIN')">All Tasks</a>
+                   <a th:href="@{/view/tasks/my-tasks}" class="px-4">My Tasks</a>
+                   <a th:href="@{/view/tasks/new}" class="px-4">New Task</a>
+                   <a th:href="@{/view/users}" class="px-4" sec:authorize="hasRole('ADMIN')">Users</a>
+                   <a th:href="@{/logout}" class="px-4">Logout</a>
+               </div>
+           </div>
+       </nav>
+       <div class="container mx-auto p-6">
+           <h2 class="text-3xl font-bold mb-6">User Details</h2>
+           <div class="bg-white p-6 rounded-lg shadow-md">
+               <p><strong>ID:</strong> <span th:text="${user.userId}"></span></p>
+               <p><strong>Username:</strong> <span th:text="${user.username}"></span></p>
+               <p><strong>Email:</strong> <span th:text="${user.email}"></span></p>
+           </div>
+       </div>
+   </body>
+   </html>

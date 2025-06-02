@@ -10,7 +10,7 @@ import com.example.TaskManagementSystem.model.TaskStatus;
 
 public interface TaskRepository extends JpaRepository<Task, Long> {
 
-    List<Task> findByAssignedToId(Long userId);
+    List<Task> findByAssignedToUserId(Long userId);
 
     List<Task> findByStatus(TaskStatus status);
 

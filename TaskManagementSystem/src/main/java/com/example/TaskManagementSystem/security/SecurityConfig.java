@@ -25,29 +25,31 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         return http
-            .csrf(csrf -> csrf.disable())
-            .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/register", "/login").permitAll()
+                .csrf(csrf -> csrf.disable())
+                .authorizeHttpRequests(auth -> auth
+                .requestMatchers("/register", "/login", "/view/users/register", "/users/register").permitAll()
                 .requestMatchers("/admin/**").hasRole("ADMIN")
                 .requestMatchers("/tasks/**").hasAnyRole("USER", "ADMIN")
+                .requestMatchers("/view/tasks/**").hasAnyRole("USER", "ADMIN")
+                .requestMatchers("/view/users/**").hasAnyRole("USER", "ADMIN")
                 .anyRequest().authenticated()
-            )
-            .formLogin(form -> form
-                .loginPage("/login") // Optional: use default if not custom
-                .defaultSuccessUrl("/tasks", true)
+                )
+                .formLogin(form -> form
+                .loginPage("/login")
+                .defaultSuccessUrl("/view/tasks/my-tasks", true)
                 .permitAll()
-            )
-            .logout(logout -> logout
+                )
+                .logout(logout -> logout
                 .logoutUrl("/logout")
                 .logoutSuccessUrl("/login?logout")
                 .permitAll()
-            )
-            .userDetailsService(userDetailsService)
-            .build();
+                )
+                .userDetailsService(userDetailsService)
+                .build();
     }
 
     @Bean
     public PasswordEncoder passwordEncoder() {
-   return new BCryptPasswordEncoder();
+        return new BCryptPasswordEncoder();
     }
 }

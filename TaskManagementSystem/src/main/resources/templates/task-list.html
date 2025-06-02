@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task List</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100">
+    <nav class="bg-blue-600 p-4 text-white">
+        <div class="container mx-auto flex justify-between">
+            <h1 class="text-2xl font-bold">Task Management System</h1>
+            <div>
+                <a th:href="@{/view/tasks}" class="px-4" sec:authorize="hasRole('ADMIN')">All Tasks</a>
+                <a th:href="@{/view/tasks/my-tasks}" class="px-4">My Tasks</a>
+                <a th:href="@{/view/tasks/new}" class="px-4">New Task</a>
+                <a th:href="@{/view/users}" class="px-4" sec:authorize="hasRole('ADMIN')">Users</a>
+                <a th:href="@{/logout}" class="px-4">Logout</a>
+            </div>
+        </div>
+    </nav>
+    <div class="container mx-auto p-6">
+        <h2 class="text-3xl font-bold mb-6">Tasks</h2>
+        <table class="w-full bg-white shadow-md rounded-lg">
+            <thead>
+                <tr class="bg-gray-200">
+                    <th class="p-3 text-left">ID</th>
+                    <th class="p-3 text-left">Title</th>
+                    <th class="p-3 text-left">Status</th>
+                    <th class="p-3 text-left">Priority</th>
+                    <th class="p-3 text-left">Assigned To</th>
+                    <th class="p-3 text-left">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="task : ${tasks}" class="border-b">
+                    <td class="p-3" th:text="${task.taskId}"></td>
+                    <td class="p-3" th:text="${task.title}"></td>
+                    <td class="p-3" th:text="${task.status}"></td>
+                    <td class="p-3" th:text="${task.priority}"></td>
+                    <td class="p-3" th:text="${task.assignedTo.username}"></td>
+                    <td class="p-3">
+                        <a th:href="@{/view/tasks/{id}(id=${task.taskId})}" class="text-blue-600 hover:underline">View</a>
+                        <span sec:authorize="hasRole('ADMIN') or authentication.principal.userId == ${task.assignedTo.userId}">
+                            |
+                            <a th:href="@{/view/tasks/{id}/edit(id=${task.taskId})}" class="text-green-600 hover:underline">Edit</a>
+                            |
+                            <form th:action="@{/view/tasks/{id}/delete(id=${task.taskId})}" method="post" class="inline">
+                                <button type="submit" class="text-red-600 hover:underline" onclick="return confirm('Are you sure?')">Delete</button>
+                            </form>
+                        </span>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

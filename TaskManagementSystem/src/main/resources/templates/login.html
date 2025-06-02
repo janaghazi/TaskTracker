@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100">
+    <div class="container mx-auto p-6">
+        <h2 class="text-3xl font-bold mb-6">Login</h2>
+        <form th:action="@{/login}" method="post" class="bg-white p-6 rounded-lg shadow-md">
+            <div th:if="${param.error}" class="text-red-600 mb-4">Invalid username or password.</div>
+            <div th:if="${param.logout}" class="text-green-600 mb-4">You have been logged out.</div>
+            <div class="mb-4">
+                <label for="username" class="block text-gray-700">Username</label>
+                <input type="text" id="username" name="username" class="w-full p-2 border rounded">
+            </div>
+            <div class="mb-4">
+                <label for="password" class="block text-gray-700">Password</label>
+                <input type="password" id="password" name="password" class="w-full p-2 border rounded">
+            </div>
+            <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Login</button>
+            <a th:href="@{/view/users/register}" class="ml-4 text-blue-600 hover:underline">Register</a>
+        </form>
+    </div>
+</body>
+</html>

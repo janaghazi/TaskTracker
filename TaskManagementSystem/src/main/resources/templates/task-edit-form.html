@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Task</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100">
+    <nav class="bg-blue-600 p-4 text-white">
+        <div class="container mx-auto flex justify-between">
+            <h1 class="text-2xl font-bold">Task Management System</h1>
+            <div>
+                <a th:href="@{/view/tasks}" class="px-4" sec:authorize="hasRole('ADMIN')">All Tasks</a>
+                <a th:href="@{/view/tasks/my-tasks}" class="px-4">My Tasks</a>
+                <a th:href="@{/view/tasks/new}" class="px-4">New Task</a>
+                <a th:href="@{/view/users}" class="px-4" sec:authorize="hasRole('ADMIN')">Users</a>
+                <a th:href="@{/logout}" class="px-4">Logout</a>
+            </div>
+        </div>
+    </nav>
+    <div class="container mx-auto p-6">
+        <h2 class="text-3xl font-bold mb-6">Edit Task</h2>
+        <form th:action="@{/view/tasks/{id}/update(id=${task.taskId})}" th:object="${task}" method="post" class="bg-white p-6 rounded-lg shadow-md">
+            <div th:if="${#fields.hasErrors('*')}" class="text-red-600 mb-4">
+                <span th:each="error : ${#fields.errors('*')}" th:text="${error}" class="block"></span>
+            </div>
+            <div class="mb-4">
+                <label for="title" class="block text-gray-700">Title</label>
+                <input type="text" id="title" th:field="*{title}" class="w-full p-2 border rounded">
+                <span th:errors="*{title}" class="text-red-600 text-sm"></span>
+            </div>
+            <div class="mb-4">
+                <label for="description" class="block text-gray-700">Description</label>
+                <textarea id="description" th:field="*{description}" class="w-full p-2 border rounded"></textarea>
+                <span th:errors="*{description}" class="text-red-600 text-sm"></span>
+            </div>
+            <div class="mb-4">
+                <label for="status" class="block text-gray-700">Status</label>
+                <select id="status" th:field="*{status}" class="w-full p-2 border rounded">
+                    <option th:each="status : ${statuses}" th:value="${status}" th:text="${status}"></option>
+                </select>
+                <span th:errors="*{status}" class="text-red-600 text-sm"></span>
+            </div>
+            <div class="mb-4">
+                <label for="priority" class="block text-gray-700">Priority</label>
+                <select id="priority" th:field="*{priority}" class="w-full p-2 border rounded">
+                    <option th:each="priority : ${priorities}" th:value="${priority}" th:text="${priority}"></option>
+                </select>
+                <span th:errors="*{priority}" class="text-red-600 text-sm"></span>
+            </div>
+            <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Update Task</button>
+        </form>
+    </div>
+</body>
+</html>
